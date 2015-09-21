@@ -6,7 +6,7 @@
 sub go {
     my $start = time;	
     my $f = "$ARGV[0]"; # change it when use for a diff file.
-    my $ex = $ARGV[1];	
+   
     my $n = `wc -l $f | perl -pe 's/^ +//g;chomp'`;
     my ($sum , $x) = split(/\ /,$n);
     my $node = 12;
@@ -15,7 +15,7 @@ sub go {
     my $last = $sum - ($node - 1) * $line; 
     print "Splitting the input for parallelization ...\n";
     &partition($line, $last, $node, $f);
-    &run($ex, $node, $start);
+    &run($node, $start);
 }
 
 sub partition {
@@ -39,7 +39,7 @@ sub partition {
 }
 
 sub run{
-  my ($ex, $node, $start) = (@_);
+  my ($node, $start) = (@_);
   my $suffix = "";
   my $dir_num = $node - 1;
   for (my $i = 0; $i <= $dir_num; $i++){

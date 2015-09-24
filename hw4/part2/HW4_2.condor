@@ -1,0 +1,7 @@
+executable = CSE835_HW4_part2.sh
+universe = vanilla
+input = input.mp4
+output = output.flv
+log = log
+error = error 
+

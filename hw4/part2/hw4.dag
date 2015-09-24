@@ -1,4 +1,4 @@
-JOB	main_job	main_job.condor
-SCRIPT PRE	main_job	split_files.pl one_thousand.txt
-SCRIPT POST	main_job	merge_output.pl
+JOB		A	HW4_2.condor
+SCRIPT PRE	A	mkdir_cp.sh 
+SCRIPT POST	A	HW4_2_post.sh
 

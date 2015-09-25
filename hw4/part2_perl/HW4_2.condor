@@ -1,7 +1,10 @@
-executable = CSE835_HW4_part2.sh
+executable = main_job.pl
 universe = vanilla
 input = input.mp4
 output = output.flv
 log = log
 error = error 
+
+InitialDir = job_Vlog_512kb
+queue
 

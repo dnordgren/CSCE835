@@ -3,7 +3,7 @@
 &go ();
 
 sub go {
-    open(IN, "< files3") or die "Cannot open input file$!\n";
+    open(IN, "< files2") or die "Cannot open input file$!\n";
     while (<IN>) {
             next if /^\#/;
             next unless /\w/;
@@ -11,7 +11,7 @@ sub go {
 	$line=~ s/\..*//;
 	chomp $line;
       `mkdir -p job_$line`;
-      `cp ../videos/$line.mp4 job_$line/input.mp4`;
+      `cp videos/$line.mp4 job_$line/input.mp4`;
     }
     close(IN);
 }

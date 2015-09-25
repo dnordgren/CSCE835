@@ -3,7 +3,7 @@
 &go ();
 
 sub go {
-    open(IN, "< files3") or die "Cannot open input file$!\n";
+    open(IN, "< files2") or die "Cannot open input file$!\n";
     `mkdir -p output_flv`;
     while (<IN>) {
             next if /^\#/;

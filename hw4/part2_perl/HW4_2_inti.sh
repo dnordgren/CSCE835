@@ -1,5 +1,8 @@
-ls -1 ../videos > files2
-echo "executable = CSE835_HW4_part2.sh" > HW4_2.condor
+ls -1 videos | perl -pe 's/\.mp4//g' > files2
+rm -f  HW4_2.condor
+rm -fr job_*
+rm -f hw4.dag.*
+echo "executable = main_job.pl" > HW4_2.condor
 echo "universe = vanilla" >> HW4_2.condor
 echo "input = input.mp4" >> HW4_2.condor
 echo "output = output.flv" >> HW4_2.condor

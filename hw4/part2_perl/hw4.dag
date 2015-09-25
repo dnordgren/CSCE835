@@ -1,0 +1,4 @@
+JOB		A	HW4_2.condor
+SCRIPT PRE	A	prescript-mkdir-cp.pl 
+SCRIPT POST	A	postscript.pl
+

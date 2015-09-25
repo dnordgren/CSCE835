@@ -14,4 +14,6 @@ sub go {
       `mv job_$line/output.flv output_flv/$line.flv`;
     }
     close(IN);
+    `echo "" >> run_time.txt`;
+    `date >> run_time.txt`;
 }

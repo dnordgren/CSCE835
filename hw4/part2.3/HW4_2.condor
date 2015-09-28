@@ -1,0 +1,12 @@
+executable = main_job.pl
+universe = vanilla
+input = input.mp4
+log = log
+error = error 
+should_transfer_files = YES
+transfer_output_files = output.flv
+transfer_input_files = /home/pi/CSCE835/hw4/part2.2/job_Vlog_512kb/input.mp4,
+when_to_transfer_output = ON_EXIT
+InitialDir = job_Vlog_512kb
+queue
+

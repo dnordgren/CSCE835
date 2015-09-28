@@ -5,7 +5,7 @@
 
 sub go {
     my $start = time;	
-    my $f = "$ARGV[0]"; # change it when use for a diff file.
+    my $f = "homework2.txt"; # change it when use for a diff file.
    
     my $n = `wc -l $f | perl -pe 's/^ +//g;chomp'`;
     my ($sum , $x) = split(/\ /,$n);

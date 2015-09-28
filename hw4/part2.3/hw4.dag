@@ -1,0 +1,4 @@
+JOB		main	HW4_2.condor
+JOB		post	post.condor
+SCRIPT PRE main prescript.pl
+PARENT main CHILD post

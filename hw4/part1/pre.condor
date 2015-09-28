@@ -1,0 +1,5 @@
+executable	=	split_files.pl
+universe	=	vanilla
+log		=	log
+error		=	error
+queue

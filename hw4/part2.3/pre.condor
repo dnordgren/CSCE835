@@ -1,0 +1,5 @@
+executable	=	prescript.pl
+universe	=	vanilla
+log		=	log
+error		=	error
+queue

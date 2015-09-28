@@ -1,0 +1,143 @@
+09/28/15 22:43:26 Setting maximum accepts per cycle 8.
+09/28/15 22:43:26 ******************************************************
+09/28/15 22:43:26 ** condor_scheduniv_exec.278.0 (CONDOR_DAGMAN) STARTING UP
+09/28/15 22:43:26 ** /usr/bin/condor_dagman
+09/28/15 22:43:26 ** SubsystemInfo: name=DAGMAN type=DAGMAN(10) class=DAEMON(1)
+09/28/15 22:43:26 ** Configuration: subsystem:DAGMAN local:<NONE> class:DAEMON
+09/28/15 22:43:26 ** $CondorVersion: 7.8.2 Feb 02 2015 Debian-7.8.2~dfsg.1-1+deb7u3 $
+09/28/15 22:43:26 ** $CondorPlatform: ARMV7L-Raspbian_7 $
+09/28/15 22:43:26 ** PID = 10483
+09/28/15 22:43:26 ** Log last touched time unavailable (No such file or directory)
+09/28/15 22:43:26 ******************************************************
+09/28/15 22:43:26 Using config source: /etc/condor/condor_config
+09/28/15 22:43:26 Using local config sources: 
+09/28/15 22:43:26    /etc/condor/config.d/90-condor-head
+09/28/15 22:43:26    /etc/condor/config.d/99sendmail.config
+09/28/15 22:43:26    /etc/condor/condor_config.local
+09/28/15 22:43:26 DaemonCore: command socket at <10.1.8.1:59706>
+09/28/15 22:43:26 DaemonCore: private command socket at <10.1.8.1:59706>
+09/28/15 22:43:26 Setting maximum accepts per cycle 8.
+09/28/15 22:43:26 DAGMAN_USE_STRICT setting: 0
+09/28/15 22:43:26 DAGMAN_VERBOSITY setting: 3
+09/28/15 22:43:26 DAGMAN_DEBUG_CACHE_SIZE setting: 5242880
+09/28/15 22:43:26 DAGMAN_DEBUG_CACHE_ENABLE setting: False
+09/28/15 22:43:26 DAGMAN_SUBMIT_DELAY setting: 0
+09/28/15 22:43:26 DAGMAN_MAX_SUBMIT_ATTEMPTS setting: 6
+09/28/15 22:43:26 DAGMAN_STARTUP_CYCLE_DETECT setting: False
+09/28/15 22:43:26 DAGMAN_MAX_SUBMITS_PER_INTERVAL setting: 5
+09/28/15 22:43:26 DAGMAN_USER_LOG_SCAN_INTERVAL setting: 5
+09/28/15 22:43:26 allow_events (DAGMAN_IGNORE_DUPLICATE_JOB_EXECUTION, DAGMAN_ALLOW_EVENTS) setting: 114
+09/28/15 22:43:26 DAGMAN_RETRY_SUBMIT_FIRST setting: True
+09/28/15 22:43:26 DAGMAN_RETRY_NODE_FIRST setting: False
+09/28/15 22:43:26 DAGMAN_MAX_JOBS_IDLE setting: 0
+09/28/15 22:43:26 DAGMAN_MAX_JOBS_SUBMITTED setting: 0
+09/28/15 22:43:26 DAGMAN_MAX_PRE_SCRIPTS setting: 0
+09/28/15 22:43:26 DAGMAN_MAX_POST_SCRIPTS setting: 0
+09/28/15 22:43:26 DAGMAN_ALLOW_LOG_ERROR setting: False
+09/28/15 22:43:26 DAGMAN_MUNGE_NODE_NAMES setting: True
+09/28/15 22:43:26 DAGMAN_PROHIBIT_MULTI_JOBS setting: False
+09/28/15 22:43:26 DAGMAN_SUBMIT_DEPTH_FIRST setting: False
+09/28/15 22:43:26 DAGMAN_ALWAYS_RUN_POST setting: True
+09/28/15 22:43:26 DAGMAN_ABORT_DUPLICATES setting: True
+09/28/15 22:43:26 DAGMAN_ABORT_ON_SCARY_SUBMIT setting: True
+09/28/15 22:43:26 DAGMAN_PENDING_REPORT_INTERVAL setting: 600
+09/28/15 22:43:26 DAGMAN_AUTO_RESCUE setting: True
+09/28/15 22:43:26 DAGMAN_MAX_RESCUE_NUM setting: 100
+09/28/15 22:43:26 DAGMAN_WRITE_PARTIAL_RESCUE setting: True
+09/28/15 22:43:26 DAGMAN_DEFAULT_NODE_LOG setting: null
+09/28/15 22:43:26 DAGMAN_GENERATE_SUBDAG_SUBMITS setting: True
+09/28/15 22:43:26 ALL_DEBUG setting: 
+09/28/15 22:43:26 DAGMAN_DEBUG setting: 
+09/28/15 22:43:26 argv[0] == "condor_scheduniv_exec.278.0"
+09/28/15 22:43:26 argv[1] == "-Lockfile"
+09/28/15 22:43:26 argv[2] == "hw4.dag.lock"
+09/28/15 22:43:26 argv[3] == "-AutoRescue"
+09/28/15 22:43:26 argv[4] == "1"
+09/28/15 22:43:26 argv[5] == "-DoRescueFrom"
+09/28/15 22:43:26 argv[6] == "0"
+09/28/15 22:43:26 argv[7] == "-Dag"
+09/28/15 22:43:26 argv[8] == "hw4.dag"
+09/28/15 22:43:26 argv[9] == "-CsdVersion"
+09/28/15 22:43:26 argv[10] == "$CondorVersion: 7.8.2 Feb 02 2015 Debian-7.8.2~dfsg.1-1+deb7u3 $"
+09/28/15 22:43:26 argv[11] == "-Dagman"
+09/28/15 22:43:26 argv[12] == "/usr/bin/condor_dagman"
+09/28/15 22:43:26 Default node log file is: </home/pi/CSCE835/hw4/part2.3/hw4.dag.nodes.log>
+09/28/15 22:43:26 DAG Lockfile will be written to hw4.dag.lock
+09/28/15 22:43:26 DAG Input file is hw4.dag
+09/28/15 22:43:26 Parsing 1 dagfiles
+09/28/15 22:43:26 Parsing hw4.dag ...
+09/28/15 22:43:26 Dag contains 2 total jobs
+09/28/15 22:43:26 Sleeping for 12 seconds to ensure ProcessId uniqueness
+09/28/15 22:43:38 Bootstrapping...
+09/28/15 22:43:38 Number of pre-completed nodes: 0
+09/28/15 22:43:38 Running PRE script of Node main...
+09/28/15 22:43:38 Registering condor_event_timer...
+09/28/15 22:43:38 PRE Script of Node main completed successfully.
+09/28/15 22:43:39 Sleeping for one second for log file consistency
+09/28/15 22:43:40 MultiLogFiles: truncating log file /home/pi/CSCE835/hw4/part2.3/job_Vlog_512kb/log
+09/28/15 22:43:40 Submitting Condor Node main job(s)...
+09/28/15 22:43:40 submitting: condor_submit -a dag_node_name' '=' 'main -a +DAGManJobId' '=' '278 -a DAGManJobId' '=' '278 -a submit_event_notes' '=' 'DAG' 'Node:' 'main -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" -a +KeepClaimIdle' '=' '20 HW4_2.condor
+09/28/15 22:43:41 From submit: Submitting job(s).
+09/28/15 22:43:41 From submit: 1 job(s) submitted to cluster 279.
+09/28/15 22:43:41 	assigned Condor ID (279.0.0)
+09/28/15 22:43:41 Just submitted 1 job this cycle...
+09/28/15 22:43:41 Currently monitoring 1 Condor log file(s)
+09/28/15 22:43:41 Event: ULOG_SUBMIT for Condor Node main (279.0.0)
+09/28/15 22:43:41 Number of idle job procs: 1
+09/28/15 22:43:41 Of 2 nodes total:
+09/28/15 22:43:41  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/28/15 22:43:41   ===     ===      ===     ===     ===        ===      ===
+09/28/15 22:43:41     0       0        1       0       0          1        0
+09/28/15 22:43:41 0 job proc(s) currently held
+09/28/15 22:43:56 Currently monitoring 1 Condor log file(s)
+09/28/15 22:43:56 Event: ULOG_EXECUTE for Condor Node main (279.0.0)
+09/28/15 22:43:56 Number of idle job procs: 0
+09/28/15 22:44:06 Currently monitoring 1 Condor log file(s)
+09/28/15 22:44:06 Event: ULOG_IMAGE_SIZE for Condor Node main (279.0.0)
+09/28/15 22:44:41 Currently monitoring 1 Condor log file(s)
+09/28/15 22:44:41 Event: ULOG_IMAGE_SIZE for Condor Node main (279.0.0)
+09/28/15 22:44:41 Event: ULOG_JOB_TERMINATED for Condor Node main (279.0.0)
+09/28/15 22:44:41 Node main job proc (279.0.0) completed successfully.
+09/28/15 22:44:41 Node main job completed
+09/28/15 22:44:41 Number of idle job procs: 0
+09/28/15 22:44:41 Of 2 nodes total:
+09/28/15 22:44:41  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/28/15 22:44:41   ===     ===      ===     ===     ===        ===      ===
+09/28/15 22:44:41     1       0        0       0       1          0        0
+09/28/15 22:44:41 0 job proc(s) currently held
+09/28/15 22:44:46 Sleeping for one second for log file consistency
+09/28/15 22:44:47 MultiLogFiles: truncating log file /home/pi/CSCE835/hw4/part2.3/log
+09/28/15 22:44:47 Submitting Condor Node post job(s)...
+09/28/15 22:44:47 submitting: condor_submit -a dag_node_name' '=' 'post -a +DAGManJobId' '=' '278 -a DAGManJobId' '=' '278 -a submit_event_notes' '=' 'DAG' 'Node:' 'post -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"main" post.condor
+09/28/15 22:44:49 From submit: Submitting job(s).
+09/28/15 22:44:49 From submit: 1 job(s) submitted to cluster 280.
+09/28/15 22:44:49 	assigned Condor ID (280.0.0)
+09/28/15 22:44:49 Just submitted 1 job this cycle...
+09/28/15 22:44:49 Currently monitoring 1 Condor log file(s)
+09/28/15 22:44:49 Event: ULOG_SUBMIT for Condor Node post (280.0.0)
+09/28/15 22:44:49 Number of idle job procs: 1
+09/28/15 22:44:49 Of 2 nodes total:
+09/28/15 22:44:49  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/28/15 22:44:49   ===     ===      ===     ===     ===        ===      ===
+09/28/15 22:44:49     1       0        1       0       0          0        0
+09/28/15 22:44:49 0 job proc(s) currently held
+09/28/15 22:44:54 Currently monitoring 1 Condor log file(s)
+09/28/15 22:44:54 Event: ULOG_EXECUTE for Condor Node post (280.0.0)
+09/28/15 22:44:54 Number of idle job procs: 0
+09/28/15 22:44:54 Event: ULOG_IMAGE_SIZE for Condor Node post (280.0.0)
+09/28/15 22:44:54 Event: ULOG_JOB_TERMINATED for Condor Node post (280.0.0)
+09/28/15 22:44:54 Node post job proc (280.0.0) failed with status 2.
+09/28/15 22:44:54 Number of idle job procs: 0
+09/28/15 22:44:54 Of 2 nodes total:
+09/28/15 22:44:54  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/28/15 22:44:54   ===     ===      ===     ===     ===        ===      ===
+09/28/15 22:44:54     1       0        0       0       0          0        1
+09/28/15 22:44:54 0 job proc(s) currently held
+09/28/15 22:44:54 Aborting DAG...
+09/28/15 22:44:54 Writing Rescue DAG to hw4.dag.rescue001...
+09/28/15 22:44:54 Note: 0 total job deferrals because of -MaxJobs limit (0)
+09/28/15 22:44:54 Note: 0 total job deferrals because of -MaxIdle limit (0)
+09/28/15 22:44:54 Note: 0 total job deferrals because of node category throttles
+09/28/15 22:44:54 Note: 0 total PRE script deferrals because of -MaxPre limit (0)
+09/28/15 22:44:54 Note: 0 total POST script deferrals because of -MaxPost limit (0)
+09/28/15 22:44:54 **** condor_scheduniv_exec.278.0 (condor_DAGMAN) pid 10483 EXITING WITH STATUS 1

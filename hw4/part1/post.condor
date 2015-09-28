@@ -1,0 +1,5 @@
+executable	=	merge_output.pl
+universe	=	vanilla
+log		=	log
+error		=	error
+queue

@@ -1,0 +1,5 @@
+JOB		main	HW4_2.condor
+JOB		pre	pre.condor 
+JOB		post	post.condor
+PARENT pre CHILD main
+PARENT main CHILD post

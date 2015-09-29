@@ -1,5 +1,5 @@
 date > run_time.txt
-ls -1 videos2 | perl -pe 's/\.mp4//g' > files2
+ls -1 videos | perl -pe 's/\.mp4//g' > files2
 rm -f  HW4_2.condor
 rm -fr job_*
 rm -f hw4.dag.*

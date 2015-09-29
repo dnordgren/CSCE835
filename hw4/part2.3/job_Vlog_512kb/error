@@ -1,45 +1,0 @@
-/var/lib/condor/execute/dir_3596
-ffmpeg version 0.8.17-6:0.8.17-1+rpi1, Copyright (c) 2000-2014 the Libav developers
-  built on Mar 25 2015 00:39:58 with gcc 4.6.3
-The ffmpeg program is only provided for script compatibility and will be removed
-in a future release. It has been deprecated in the Libav project to allow for
-incompatible command line syntax improvements in its replacement called avconv
-(see Changelog for details). Please use avconv instead.
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'input.mp4':
-  Metadata:
-    major_brand     : isom
-    minor_version   : 512
-    compatible_brands: mp41
-    creation_time   : 1970-01-01 00:00:00
-    title           : Before Oklahoma  Game - http://www.archive.org/details/BeforeOklahomaGame
-    encoder         : Lavf51.10.0
-    comment         : license:  http://creativecommons.org/licenses/by-nc-nd/2.5/
-  Duration: 00:01:02.57, start: 0.000000, bitrate: 561 kb/s
-    Stream #0.0(und): Video: h264 (Constrained Baseline), yuv420p, 320x240, 511 kb/s, 30 fps, 30 tbr, 30 tbn, 60 tbc
-    Metadata:
-      creation_time   : 1970-01-01 00:00:00
-    Stream #0.1(und): Audio: aac, 44100 Hz, stereo, s16, 46 kb/s
-    Metadata:
-      creation_time   : 1970-01-01 00:00:00
-[buffer @ 0xd66fe0] w:320 h:240 pixfmt:yuv420p
-Output #0, flv, to '/var/lib/condor/execute/dir_3596/output.flv':
-  Metadata:
-    major_brand     : isom
-    minor_version   : 512
-    compatible_brands: mp41
-    creation_time   : 1970-01-01 00:00:00
-    title           : Before Oklahoma  Game - http://www.archive.org/details/BeforeOklahomaGame
-    comment         : license:  http://creativecommons.org/licenses/by-nc-nd/2.5/
-    encoder         : Lavf53.21.1
-    Stream #0.0(und): Video: flv, yuv420p, 320x240, q=2-31, 200 kb/s, 1k tbn, 30 tbc
-    Metadata:
-      creation_time   : 1970-01-01 00:00:00
-    Stream #0.1(und): Audio: libmp3lame, 22050 Hz, stereo, s16, 200 kb/s
-    Metadata:
-      creation_time   : 1970-01-01 00:00:00
-Stream mapping:
-  Stream #0.0 -> #0.0
-  Stream #0.1 -> #0.1
-Press ctrl-c to stop encoding
-frame=   17 fps=  0 q=14.1 size=      82kB time=0.47 bitrate=1428.3kbits/s    frame=   40 fps= 38 q=19.7 size=     131kB time=1.23 bitrate= 871.2kbits/s    frame=   63 fps= 40 q=21.8 size=     170kB time=2.01 bitrate= 690.9kbits/s    frame=   86 fps= 41 q=27.4 size=     214kB time=2.79 bitrate= 628.5kbits/s    frame=  110 fps= 42 q=27.6 size=     256kB time=3.58 bitrate= 585.0kbits/s    frame=  133 fps= 43 q=20.9 size=     296kB time=4.34 bitrate= 559.2kbits/s    frame=  157 fps= 44 q=20.3 size=     337kB time=5.15 bitrate= 536.4kbits/s    frame=  181 fps= 44 q=18.6 size=     378kB time=5.96 bitrate= 519.6kbits/s    frame=  205 fps= 44 q=19.1 size=     418kB time=6.74 bitrate= 507.9kbits/s    frame=  230 fps= 45 q=21.0 size=     459kB time=7.58 bitrate= 496.5kbits/s    frame=  254 fps= 45 q=26.2 size=     501kB time=8.38 bitrate= 489.2kbits/s    frame=  278 fps= 45 q=25.9 size=     541kB time=9.17 bitrate= 483.3kbits/s    frame=  301 fps= 45 q=24.8 size=     582kB time=9.95 bitrate= 478.7kbits/s    frame=  323 fps= 45 q=31.0 size=     623kB time=10.71 bitrate= 476.2kbits/s    frame=  346 fps= 45 q=31.0 size=     659kB time=11.44 bitrate= 472.1kbits/s    frame=  369 fps= 45 q=31.0 size=     697kB time=12.22 bitrate= 467.4kbits/s    frame=  392 fps= 45 q=29.2 size=     735kB time=13.01 bitrate= 462.6kbits/s    frame=  415 fps= 45 q=31.0 size=     769kB time=13.74 bitrate= 458.7kbits/s    frame=  437 fps= 45 q=31.0 size=     810kB time=14.47 bitrate= 458.3kbits/s    frame=  459 fps= 45 q=31.0 size=     848kB time=15.23 bitrate= 456.1kbits/s    frame=  481 fps= 45 q=24.8 size=     882kB time=15.96 bitrate= 452.5kbits/s    frame=  504 fps= 45 q=31.0 size=     919kB time=16.72 bitrate= 450.3kbits/s    frame=  527 fps= 45 q=31.0 size=     955kB time=17.48 bitrate= 447.9kbits/s    frame=  550 fps= 45 q=31.0 size=     994kB time=18.26 bitrate= 445.8kbits/s    frame=  572 fps= 45 q=31.0 size=    1030kB time=18.96 bitrate= 445.0kbits/s    frame=  594 fps= 45 q=31.0 size=    1068kB time=19.75 bitrate= 443.1kbits/s    frame=  616 fps= 45 q=31.0 size=    1105kB time=20.43 bitrate= 443.0kbits/s    frame=  637 fps= 45 q=24.8 size=    1142kB time=21.18 bitrate= 441.6kbits/s    frame=  660 fps= 45 q=31.0 size=    1179kB time=21.89 bitrate= 441.1kbits/s    frame=  683 fps= 45 q=31.0 size=    1216kB time=22.70 bitrate= 438.8kbits/s    frame=  706 fps= 45 q=31.0 size=    1250kB time=23.48 bitrate= 436.0kbits/s    frame=  731 fps= 45 q=31.0 size=    1285kB time=24.27 bitrate= 433.7kbits/s    frame=  755 fps= 45 q=31.0 size=    1320kB time=25.08 bitrate= 431.1kbits/s    frame=  777 fps= 45 q=31.0 size=    1357kB time=25.81 bitrate= 430.8kbits/s    frame=  800 fps= 45 q=31.0 size=    1396kB time=26.59 bitrate= 430.2kbits/s    frame=  823 fps= 45 q=31.0 size=    1434kB time=27.35 bitrate= 429.5kbits/s    frame=  846 fps= 45 q=31.0 size=    1472kB time=28.13 bitrate= 428.7kbits/s    frame=  869 fps= 45 q=31.0 size=    1510kB time=28.89 bitrate= 428.1kbits/s    frame=  893 fps= 45 q=31.0 size=    1547kB time=29.68 bitrate= 427.0kbits/s    frame=  917 fps= 45 q=31.0 size=    1584kB time=30.46 bitrate= 426.0kbits/s    frame=  940 fps= 45 q=31.0 size=    1620kB time=31.24 bitrate= 424.7kbits/s    frame=  965 fps= 45 q=29.3 size=    1654kB time=32.08 bitrate= 422.4kbits/s    frame=  991 fps= 45 q=27.5 size=    1687kB time=32.94 bitrate= 419.5kbits/s    frame= 1017 fps= 45 q=30.2 size=    1720kB time=33.80 bitrate= 416.9kbits/s    frame= 1041 fps= 45 q=31.0 size=    1761kB time=34.61 bitrate= 416.7kbits/s    frame= 1063 fps= 45 q=31.0 size=    1811kB time=35.34 bitrate= 419.8kbits/s    frame= 1087 fps= 45 q=31.0 size=    1847kB time=36.15 bitrate= 418.4kbits/s    frame= 1112 fps= 46 q=31.0 size=    1881kB time=36.96 bitrate= 416.9kbits/s    frame= 1137 fps= 46 q=31.0 size=    1916kB time=37.80 bitrate= 415.2kbits/s    frame= 1162 fps= 46 q=31.0 size=    1949kB time=38.63 bitrate= 413.3kbits/s    frame= 1188 fps= 46 q=28.8 size=    1984kB time=39.50 bitrate= 411.4kbits/s    frame= 1214 fps= 46 q=27.6 size=    2018kB time=40.38 bitrate= 409.4kbits/s    frame= 1239 fps= 46 q=29.4 size=    2052kB time=41.22 bitrate= 407.8kbits/s    frame= 1264 fps= 46 q=28.1 size=    2090kB time=42.06 bitrate= 407.1kbits/s    frame= 1289 fps= 46 q=27.9 size=    2124kB time=42.89 bitrate= 405.6kbits/s    frame= 1313 fps= 46 q=31.0 size=    2159kB time=43.68 bitrate= 405.0kbits/s    frame= 1317 fps= 45 q=31.0 size=    2165kB time=43.81 bitrate= 404.8kbits/s    frame= 1341 fps= 45 q=31.0 size=    2203kB time=44.62 bitrate= 404.4kbits/s    frame= 1366 fps= 46 q=31.0 size=    2240kB time=45.45 bitrate= 403.8kbits/s    frame= 1391 fps= 46 q=31.0 size=    2278kB time=46.29 bitrate= 403.1kbits/s    frame= 1415 fps= 46 q=31.0 size=    2318kB time=47.07 bitrate= 403.4kbits/s    frame= 1439 fps= 46 q=31.0 size=    2354kB time=47.88 bitrate= 402.7kbits/s    frame= 1463 fps= 46 q=30.1 size=    2387kB time=48.67 bitrate= 401.8kbits/s    frame= 1487 fps= 46 q=30.1 size=    2420kB time=49.48 bitrate= 400.7kbits/s    frame= 1511 fps= 46 q=31.0 size=    2456kB time=50.29 bitrate= 400.0kbits/s    frame= 1536 fps= 46 q=28.7 size=    2489kB time=51.12 bitrate= 398.9kbits/s    frame= 1536 fps= 44 q=28.7 size=    2489kB time=51.12 bitrate= 398.9kbits/s    frame= 1560 fps= 44 q=28.7 size=    2523kB time=51.91 bitrate= 398.1kbits/s    frame= 1584 fps= 44 q=28.3 size=    2556kB time=52.72 bitrate= 397.2kbits/s    frame= 1608 fps= 44 q=27.8 size=    2589kB time=53.52 bitrate= 396.3kbits/s    frame= 1632 fps= 44 q=29.6 size=    2623kB time=54.34 bitrate= 395.4kbits/s    frame= 1656 fps= 44 q=31.0 size=    2656kB time=55.09 bitrate= 395.0kbits/s    frame= 1681 fps= 44 q=31.0 size=    2693kB time=55.93 bitrate= 394.4kbits/s    frame= 1706 fps= 44 q=29.9 size=    2727kB time=56.79 bitrate= 393.4kbits/s    frame= 1730 fps= 44 q=31.0 size=    2761kB time=57.60 bitrate= 392.7kbits/s    frame= 1754 fps= 44 q=31.0 size=    2803kB time=58.38 bitrate= 393.3kbits/s    frame= 1778 fps= 44 q=31.0 size=    2840kB time=59.22 bitrate= 392.9kbits/s    frame= 1802 fps= 44 q=31.0 size=    2873kB time=59.98 bitrate= 392.4kbits/s    frame= 1826 fps= 44 q=31.0 size=    2908kB time=60.76 bitrate= 392.1kbits/s    frame= 1849 fps= 44 q=31.0 size=    2944kB time=61.54 bitrate= 391.9kbits/s    frame= 1873 fps= 45 q=13.9 Lsize=    2993kB time=62.43 bitrate= 392.7kbits/s    
-video:1702kB audio:1223kB global headers:0kB muxing overhead 2.300090%

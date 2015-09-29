@@ -5,8 +5,68 @@ log = log
 error = error 
 should_transfer_files = YES
 transfer_output_files = output.flv
-transfer_input_files = /home/pi/CSCE835/hw4/part2.2/job_Vlog_512kb/input.mp4,
+transfer_input_files = /home/pi/CSCE835/hw4/part2.3/job_AH-64_Apache_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_Aviation_Crash_Rescue_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_C-12_Huron_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_CC_1914_08_31_TheGoodforNothing_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_ChallengerDisaster_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_crashrescue_CH47Chinook_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_crashrescue_OH58KIOWA_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_crashrescue_UH1Huey_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_crashrscue_UH60Blackhawk_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_IMB_SF_C3_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_IMB_SF_R17_C1_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_IMB_SF_R17_C8_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_IMB_SF_R7_C5_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_IMB_SF_R7_C9_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_Mario1_500_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_Mario1_500_HQ_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_Mario1_500_LQ_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_superman_electric_earthquake_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_superman_the_mechanical_monsters_512kb/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_tacoma_narrorws/input.mp4,/home/pi/CSCE835/hw4/part2.3/job_Vlog_512kb/input.mp4,
 when_to_transfer_output = ON_EXIT
+InitialDir = job_AH-64_Apache_512kb
+queue
+
+InitialDir = job_Aviation_Crash_Rescue_512kb
+queue
+
+InitialDir = job_C-12_Huron_512kb
+queue
+
+InitialDir = job_CC_1914_08_31_TheGoodforNothing_512kb
+queue
+
+InitialDir = job_ChallengerDisaster_512kb
+queue
+
+InitialDir = job_crashrescue_CH47Chinook_512kb
+queue
+
+InitialDir = job_crashrescue_OH58KIOWA_512kb
+queue
+
+InitialDir = job_crashrescue_UH1Huey_512kb
+queue
+
+InitialDir = job_crashrscue_UH60Blackhawk_512kb
+queue
+
+InitialDir = job_IMB_SF_C3_512kb
+queue
+
+InitialDir = job_IMB_SF_R17_C1_512kb
+queue
+
+InitialDir = job_IMB_SF_R17_C8_512kb
+queue
+
+InitialDir = job_IMB_SF_R7_C5_512kb
+queue
+
+InitialDir = job_IMB_SF_R7_C9_512kb
+queue
+
+InitialDir = job_Mario1_500_512kb
+queue
+
+InitialDir = job_Mario1_500_HQ_512kb
+queue
+
+InitialDir = job_Mario1_500_LQ_512kb
+queue
+
+InitialDir = job_superman_electric_earthquake_512kb
+queue
+
+InitialDir = job_superman_the_mechanical_monsters_512kb
+queue
+
+InitialDir = job_tacoma_narrorws
+queue
+
 InitialDir = job_Vlog_512kb
 queue
 

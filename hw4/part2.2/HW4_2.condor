@@ -6,6 +6,66 @@ error = error
 should_transfer_files = YES
 transfer_output_files = output.flv
 when_to_transfer_output = ON_EXIT
+InitialDir = job_AH-64_Apache_512kb
+queue
+
+InitialDir = job_Aviation_Crash_Rescue_512kb
+queue
+
+InitialDir = job_C-12_Huron_512kb
+queue
+
+InitialDir = job_CC_1914_08_31_TheGoodforNothing_512kb
+queue
+
+InitialDir = job_ChallengerDisaster_512kb
+queue
+
+InitialDir = job_crashrescue_CH47Chinook_512kb
+queue
+
+InitialDir = job_crashrescue_OH58KIOWA_512kb
+queue
+
+InitialDir = job_crashrescue_UH1Huey_512kb
+queue
+
+InitialDir = job_crashrscue_UH60Blackhawk_512kb
+queue
+
+InitialDir = job_IMB_SF_C3_512kb
+queue
+
+InitialDir = job_IMB_SF_R17_C1_512kb
+queue
+
+InitialDir = job_IMB_SF_R17_C8_512kb
+queue
+
+InitialDir = job_IMB_SF_R7_C5_512kb
+queue
+
+InitialDir = job_IMB_SF_R7_C9_512kb
+queue
+
+InitialDir = job_Mario1_500_512kb
+queue
+
+InitialDir = job_Mario1_500_HQ_512kb
+queue
+
+InitialDir = job_Mario1_500_LQ_512kb
+queue
+
+InitialDir = job_superman_electric_earthquake_512kb
+queue
+
+InitialDir = job_superman_the_mechanical_monsters_512kb
+queue
+
+InitialDir = job_tacoma_narrorws
+queue
+
 InitialDir = job_Vlog_512kb
 queue
 

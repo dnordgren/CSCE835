@@ -1,0 +1,52 @@
+000 (297.000.000) 09/28 23:53:28 Job submitted from host: <10.1.8.1:55324>
+    DAG Node: pre
+...
+001 (297.000.000) 09/28 23:53:38 Job executing on host: <10.1.8.2:49017>
+...
+006 (297.000.000) 09/28 23:53:46 Image size of job updated: 1
+	6  -  MemoryUsage of job (MB)
+	5496  -  ResidentSetSize of job (KB)
+...
+006 (297.000.000) 09/28 23:55:37 Image size of job updated: 6728
+	6  -  MemoryUsage of job (MB)
+	5496  -  ResidentSetSize of job (KB)
+...
+005 (297.000.000) 09/28 23:55:40 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	96  -  Run Bytes Sent By Job
+	423  -  Run Bytes Received By Job
+	96  -  Total Bytes Sent By Job
+	423  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request          
+	   Cpus                 :                 1          
+	   Disk (KB)            :        8        8          
+	   Memory (MB)          :        6        6          
+...
+000 (299.000.000) 09/29 00:00:45 Job submitted from host: <10.1.8.1:55324>
+    DAG Node: post
+...
+001 (299.000.000) 09/29 00:00:45 Job executing on host: <10.1.8.1:54078>
+...
+006 (299.000.000) 09/29 00:00:47 Image size of job updated: 1
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (299.000.000) 09/29 00:00:48 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request          
+	   Cpus                 :                 1          
+	   Disk (KB)            :        1        1          
+	   Memory (MB)          :        0        0          
+...

@@ -1,0 +1,4 @@
+JOB	main_job	main_job.condor
+SCRIPT PRE	main_job	split_files.pl homework2.txt
+SCRIPT POST	main_job	merge_output.pl
+

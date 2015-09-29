@@ -8,8 +8,8 @@ Part 1
 Part 2
 	2.1 - Full NFS
 	---------------------------------------------------------------------------------------------
-	We executed the ffmpeg jobs first using NFS, which took approximately 9 minutes (see 
-	part2.1/NFS_run_time.txt for exact timestamps).
+	We executed the ffmpeg jobs first using NFS, which took approximately 8 minutes (see 
+	part2.1/NFS_run_time.txt for exact timestamps, added 1 min manually).
 
 	To execute this, run the command `bash part2.1/init.sh`. The output will be stored in run_time.txt.
 	
@@ -18,7 +18,8 @@ Part 2
 	In this part we used input through NFS and transferred the output. To make sure input is through NFS,
 	we hard coded absolute path to the files in the scipts.
  
-	This part took approximately 9 mins. See part2.2/run_time.txt for exact timestamps.
+	This part took approximately 9 mins. (See part2.2/run_time.txt for exact timestamps, measured 2 mins manually
+	when compared to the files).
 
 	To execute this, run the command `bash part2.2/init2.sh`.
 
@@ -28,7 +29,7 @@ Part 2
 	17 mins.
 	
 	To execute this, run the command `bash part2.3/init3.sh`. The start time will be stored in run_time.txt
-	and the end time will be stored in run_time_output.txt
+	and the end time will be stored in run_time_output.txt. 
 
 	Conclusion:
 	We  have observed that NFS gives the best performance and Half NFS gives the next best.

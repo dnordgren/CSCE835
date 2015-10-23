@@ -4,7 +4,8 @@ In this homework, we conducted experiments of:
 (1) measure the communication time for our clusters by using the ping-pong method;
 (2) examine the impact of latency hiding method on communication time.
 
-As a result, the point to point communication time is recorded as following:
+As a result, the point to point communication time is recorded as following(hw7.out):
+
 ```
 Kind		n	time (sec)	Rate (MB/sec)
 Send/Recv	1	0.000002	4.969187
@@ -29,6 +30,26 @@ Send/Recv	262144	0.000929	2257.434370
 Send/Recv	524288	0.001894	2215.082604
 Send/Recv	1048576	0.004238	1979.151854
 ```
+And the output we received latency hiding which was acheived by using non-blocking process(Isend and Irecv) was(hw7_2.out),
 
+```
+Kind		n	time (sec)	Rate (MB/sec)
+Send/Recv	1	0.000002	3.682444
+Send/Recv	2	0.000002	9.828480
+Send/Recv	4	0.000001	27.027331
+Send/Recv	8	0.000001	60.842125
+Send/Recv	16	0.000002	82.698128
+Send/Recv	32	0.000001	198.722367
+```
+We received segmentation errors and could not perform more than 32 operations for non-blocking processes.
+ 
 Moreover, we found that latency hiding method actually shorten the communication time and improved the rate of data transportation. The comparison result is showed in "HW7.png".
+
+Instructions to run the code:
+The first part of the assignment can be executed using the bin file ping_pong or by creating the bin file from ping_pong.c
+The first part of the assignment can be executed using the bin file non_blocking or by creating the bin file from non_blocking.c
+
+References:
+1. https://www.hpc2n.umu.se/node/230
+
 

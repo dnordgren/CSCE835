@@ -6,6 +6,8 @@ In this homework, we conducted experiments of:
 
 As a result, the point to point communication time is recorded as following(hw7.out):
 
+Here n is the size of the message being sent. Increase the size of the message exponentially on every ping. We multiply n with size of double and this buffer as the message.
+
 ```
 Kind		n	time (sec)	Rate (MB/sec)
 Send/Recv	1	0.000002	4.969187
@@ -41,7 +43,7 @@ Send/Recv	8	0.000001	60.842125
 Send/Recv	16	0.000002	82.698128
 Send/Recv	32	0.000001	198.722367
 ```
-We received segmentation errors and could not perform more than 32 operations for non-blocking processes.
+We received segmentation errors and could not perform more than 32*8 bytes in a ping for non-blocking processes.
  
 Moreover, we found that latency hiding method actually shorten the communication time and improved the rate of data transportation. The comparison result is showed in "HW7.png".
 

@@ -47,6 +47,51 @@ def process_section(section, dim):
     # process section; return section updated for next iteration
 
 
+def check_cell(board, row, col, dim):
+    cell = board[row][col]
+
+    # determine row index above cell
+    up = row - 1
+    if row == 0:
+        up = dim - 1
+    # determine row index below cell
+    down = row + 1
+    if row == dim-1:
+        down = 0
+    # determine col index left of cell
+    left = col - 1
+    if col == 0:
+        left = dim - 1
+    # determine col index right of cell
+    right = col + 1
+    if col == dim-1:
+        right = 0
+
+    # compute all neighbors
+    cell_neighbors = []
+    cell_neighbors.append(board[up][left])
+    cell_neighbors.append(board[up][col])
+    cell_neighbors.append(board[up][right])
+    cell_neighbors.append(board[row][left])
+    cell_neighbors.append(board[row][right])
+    cell_neighbors.append(board[down][left])
+    cell_neighbors.append(board[down][col])
+    cell_neighbors.append(board[down][right])
+
+    live_neighbors = cell_neighbors.count(1)
+
+    if cell == 1:
+        if live_neighbors < 2:
+            return "die"
+        elif live_neighbors > 3:
+            return "die"
+        else
+            return "live"
+    elif cell == 0:
+        if live_neighbors == 3:
+            return "reproduce"
+
+
 def merge_sections(sections):
     # merge processed sections back into full board
     # remove section overlap

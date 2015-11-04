@@ -10,21 +10,30 @@ def main(argv):
         lines = f.readlines()
 
     # parse number of generations from input file
-    num_gens = int(lines.pop(0))
+    num_iter = int(lines.pop(0))
     # parse board size from input file
     board_dim = int(lines.pop(0))
 
     # build the game board
     board = build_board(lines, board_dim)
 
+    pretty_print_board(board, board_dim)
+    print ""
+
+    # run the simulation
+    for i in range(num_iter):
+        board = run_iter(board, board_dim)
+        pretty_print_board(board, board_dim)
+        print ""
+
     # done; print the output
-    print_board(board, board_dim)
+    #print_board(board, board_dim)
 
 
 # takes the input file format and converts to 2d array for iterating
 def build_board(lines, dim):
     # initialize 2d array for board
-    board = [[0 for x in range(dim)] for x in range(dim)]
+    board = [["0" for x in range(dim)] for x in range(dim)]
 
     for l in lines:
         # strip trailing whitespace
@@ -32,7 +41,7 @@ def build_board(lines, dim):
         # split the line into the two coordinates
         tokens = l.split(',')
         # fill game board with starting live cells
-        board[int(tokens[0])][int(tokens[1])] = 1
+        board[int(tokens[0])][int(tokens[1])] = "1"
     return board
 
 
@@ -42,9 +51,24 @@ def run_iter(board, dim):
     # send subsection to be processed / updated for next iteration
     # merge output back into full board
 
+    # return new board (result of iteration)
+    return process_section(board, dim)
+
 
 def process_section(section, dim):
+    # declare next iteration board
+    new_board = [["0" for x in range(dim)] for x in range(dim)]
     # process section; return section updated for next iteration
+    for row in range(dim):
+        for col in range(dim):
+            result = check_cell(section, row, col, dim)
+            # if cell should be dead, set to 0 in next iteration board
+            if result == "die":
+                new_board[row][col] = "0"
+            # if cell reproduced or still lives, set to 1 in next board
+            elif result == "reproduce" or result == "live":
+                new_board[row][col] = "1"
+    return new_board
 
 
 def check_cell(board, row, col, dim):
@@ -78,32 +102,43 @@ def check_cell(board, row, col, dim):
     cell_neighbors.append(board[down][col])
     cell_neighbors.append(board[down][right])
 
-    live_neighbors = cell_neighbors.count(1)
-
-    if cell == 1:
+    live_neighbors = cell_neighbors.count("1")
+    #print "live neighbors = " + str(live_neighbors)
+    if cell == "1":
         if live_neighbors < 2:
             return "die"
         elif live_neighbors > 3:
             return "die"
-        else
+        else:
             return "live"
-    elif cell == 0:
+    elif cell == "0":
         if live_neighbors == 3:
             return "reproduce"
+        else:
+            return "NA"
 
 
 def merge_sections(sections):
     # merge processed sections back into full board
     # remove section overlap
+    pass
 
 
 # prints the board in the input file format
 def print_board(board, dim):
     for row in range(dim):
         for col in range(dim):
-            if(board[row][col] == 1):
+            if(board[row][col] == "1"):
                 print '%s,%s'%(row,col)
-    
+
+
+def pretty_print_board(board, dim):
+    print_str = ""
+    for row in range(dim):
+        for col in range(dim):
+            print_str += str(board[row][col])
+        print print_str
+        print_str = ""
+
 
 if __name__ == '__main__': main(sys.argv[1:])
-

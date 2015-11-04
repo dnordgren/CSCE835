@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import sys
+from mpi4py import MPI
 
 def main(argv):
     filename = argv[0]
@@ -17,13 +18,15 @@ def main(argv):
     # build the game board
     board = build_board(lines, board_dim)
 
-    pretty_print_board(board, board_dim)
+    pretty_print_board(board, board_dim, board_dim)
     print ""
 
+    comm = MPI.COMM_WORLD
+
     # run the simulation
-    for i in range(num_iter):
-        board = run_iter(board, board_dim)
-        pretty_print_board(board, board_dim)
+    for i in range(1):
+        board = run_iter(1, board, board_dim, num_cores)
+        pretty_print_board(board, board_dim, board_dim)
         print ""
 
     # done; print the output
@@ -45,11 +48,28 @@ def build_board(lines, dim):
     return board
 
 
-def run_iter(board, dim):
+def run_iter(comm, board, dim, num_cores):
     # divide board into num_cores subsections
     # have subsections include overlapping edge with other subsections
     # send subsection to be processed / updated for next iteration
     # merge output back into full board
+    new_board = list(board)
+    new_board.insert(0, board[dim-1])
+    new_board.append(board[0])
+    pretty_print_board(new_board, dim+2, dim)
+    print ""
+
+    num_divisions = dim / num_cores
+    for row in range(1, num_cores, num_divisions):
+        rows = board[row-1:row+num_divisions]
+
+    rank = comm.Get_rank()
+    if (rank == 0):
+        pass
+        # divide and send
+    else:
+        pass
+        # run divisions
 
     # return new board (result of iteration)
     return process_section(board, dim)
@@ -132,11 +152,11 @@ def print_board(board, dim):
                 print '%s,%s'%(row,col)
 
 
-def pretty_print_board(board, dim):
+def pretty_print_board(board, col, row):
     print_str = ""
-    for row in range(dim):
-        for col in range(dim):
-            print_str += str(board[row][col])
+    for c in range(col):
+        for r in range(row):
+            print_str += str(board[c][r])
         print print_str
         print_str = ""
 

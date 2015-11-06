@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys
-#from mpi4py import MPI
+from mpi4py import MPI
+import numpy as np
 debugMode = 0
 def main(argv):
     filename = argv[0]
@@ -21,11 +22,11 @@ def main(argv):
     pretty_print_board(board)
     print ""
 
-    #comm = MPI.COMM_WORLD
+    comm = MPI.COMM_WORLD
 
     # run the simulation
     for i in range(num_iter):
-        board = run_iter(i, board, board_dim, num_cores)
+        board = run_iter(comm, board, board_dim, num_cores)
         pretty_print_board(board)
         print ""
 
@@ -36,7 +37,7 @@ def main(argv):
 # takes the input file format and converts to 2d array for iterating
 def build_board(lines, dim):
     # initialize 2d array for board
-    board = [["0" for x in range(dim)] for x in range(dim)]
+    board = [[0 for x in range(dim)] for x in range(dim)]
 
     for l in lines:
         # strip trailing whitespace
@@ -44,10 +45,10 @@ def build_board(lines, dim):
         # split the line into the two coordinates
         tokens = l.split(',')
         # fill game board with starting live cells
-        board[int(tokens[0])][int(tokens[1])] = "1"
+        board[int(tokens[0])][int(tokens[1])] = 1
     return board
 
-
+  
 def run_iter(comm, board, dim, num_cores):
     # divide board into num_cores subsections
     # have subsections include overlapping edge with other subsections
@@ -62,8 +63,7 @@ def run_iter(comm, board, dim, num_cores):
     	pretty_print_board(new_board)
     	print ""
 
-    rank = 0
-    #rank = comm.Get_rank()
+    rank = comm.Get_rank()
     if (rank == 0):
 
         num_divisions = dim / num_cores
@@ -71,42 +71,48 @@ def run_iter(comm, board, dim, num_cores):
         	print "Dividing input..."
         	print "Snipped boards are...\n"
         next_board = []
+	rows_to_process = []
     	for row in range(1, num_cores*num_divisions, num_divisions):
     		rows = list(new_board[row-1:row+num_divisions+1])
-		if(debugMode):
-			pretty_print_board(rows)
-			print ""
-		rsize = num_divisions + 2;
-		csize = dim;
-		processed_rows = process_section(rows, rsize, csize)
-		if(debugMode):
-			print("Processed snippet is...")
-			pretty_print_board(processed_rows)
-			print ""
-		for i in range(num_divisions):
-			next_board.append(processed_rows[i])
-	# divide and send
+		rows_to_process.append(rows)
+	for i in range(0, len(rows_to_process)-1):
+		print "sending data to core: " + str(i+1)
+		data = np.array(rows_to_process[i], dtype='i')
+		comm.Send([data, MPI.INT], dest=i+1)
+		#rsize = num_divisions + 2
+		#csize = dim;
+		#processed_rows = process_section(rows, rsize, csize)
+		#for i in range(num_divisions):
+		#	next_board.append(processed_rows[i])
+		# divide and send
+		recv = np.zeros((3,6), dtype='i')
+		comm.Recv([recv, MPI.INT], source=i+1)
+		print "receiving processed row:"
+		print recv
     else:
         pass
         # run divisions
-
-    # return new board (result of iteration)
-    return next_board
+	data = np.zeros((5,6), dtype='i')
+	comm.Recv([data, MPI.INT], source=0)
+	print data
+	processed_row = np.array(process_section(data, 5, 6), dtype='i')
+	print processed_row
+	comm.Send([processed_row, MPI.INT], dest=0)
 
 
 def process_section(section, dim):
     # declare next iteration board
-    new_board = [["0" for x in range(dim)] for x in range(dim)]
+    new_board = [[0 for x in range(dim)] for x in range(dim)]
     # process section; return section updated for next iteration
     for row in range(dim):
         for col in range(dim):
             result = check_cell(section, row, col, dim)
             # if cell should be dead, set to 0 in next iteration board
             if result == "die":
-                new_board[row][col] = "0"
+                new_board[row][col] = 0
             # if cell reproduced or still lives, set to 1 in next board
             elif result == "reproduce" or result == "live":
-                new_board[row][col] = "1"
+                new_board[row][col] = 1
     return new_board
 
 def process_section(section, rsize, csize):
@@ -114,17 +120,17 @@ def process_section(section, rsize, csize):
     if(debugMode):
     	print "rsize:" + str(rsize)
     	print "csize:" + str(csize)
-    new_board = [["0" for x in range(csize)] for x in range(rsize-2)]
+    new_board = [[0 for x in range(csize)] for x in range(rsize-2)]
     # process section; return section updated for next iteration
     for row in range(1, rsize-1):
         for col in range(csize):
             result = check_cell(section, row, col, rsize,csize)
             # if cell should be dead, set to 0 in next iteration board
             if result == "die":
-                new_board[row-1][col] = "0"
+                new_board[row-1][col] = 0
             # if cell reproduced or still lives, set to 1 in next board
             elif result == "reproduce" or result == "live":
-                new_board[row-1][col] = "1"
+                new_board[row-1][col] = 1
     return new_board
 
 def check_cell(board, row, col, dim):
@@ -207,16 +213,16 @@ def check_cell(board, row, col, rsize, csize):
     cell_neighbors.append(board[down][col])
     cell_neighbors.append(board[down][right])
 
-    live_neighbors = cell_neighbors.count("1")
+    live_neighbors = cell_neighbors.count(1)
     #print "live neighbors = " + str(live_neighbors)
-    if cell == "1":
+    if cell == 1:
         if live_neighbors < 2:
             return "die"
         elif live_neighbors > 3:
             return "die"
         else:
             return "live"
-    elif cell == "0":
+    elif cell == 0:
         if live_neighbors == 3:
             return "reproduce"
         else:
@@ -232,7 +238,7 @@ def merge_sections(sections):
 def print_board(board, dim):
     for row in range(dim):
         for col in range(dim):
-            if(board[row][col] == "1"):
+            if(board[row][col] == 1):
                 print '%s,%s'%(row,col)
 
 

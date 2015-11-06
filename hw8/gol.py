@@ -5,7 +5,7 @@ debugMode = 0
 def main(argv):
     filename = argv[0]
     num_cores = int(argv[1])
-    
+
     with open(filename) as f:
         # read in lines from input file
         lines = f.readlines()
@@ -18,7 +18,7 @@ def main(argv):
     # build the game board
     board = build_board(lines, board_dim)
 
-    pretty_print_board(board, board_dim, board_dim)
+    pretty_print_board(board)
     print ""
 
     #comm = MPI.COMM_WORLD
@@ -26,7 +26,7 @@ def main(argv):
     # run the simulation
     for i in range(num_iter):
         board = run_iter(i, board, board_dim, num_cores)
-        pretty_print_board(board, board_dim, board_dim)
+        pretty_print_board(board)
         print ""
 
     # done; print the output
@@ -56,16 +56,16 @@ def run_iter(comm, board, dim, num_cores):
     new_board = list(board)
     new_board.insert(0, board[dim-1])
     new_board.append(board[0])
-    
+
     if(debugMode):
     	print "Matrix with ghost rows is..."
-    	pretty_print_board(new_board, dim+2, dim)
+    	pretty_print_board(new_board)
     	print ""
-	
+
     rank = 0
     #rank = comm.Get_rank()
     if (rank == 0):
-        
+
         num_divisions = dim / num_cores
         if(debugMode):
         	print "Dividing input..."
@@ -74,14 +74,14 @@ def run_iter(comm, board, dim, num_cores):
     	for row in range(1, num_cores*num_divisions, num_divisions):
     		rows = list(new_board[row-1:row+num_divisions+1])
 		if(debugMode):
-			pretty_print_board(rows,num_divisions+2,dim)
+			pretty_print_board(rows)
 			print ""
 		rsize = num_divisions + 2;
 		csize = dim;
 		processed_rows = process_section(rows, rsize, csize)
 		if(debugMode):
 			print("Processed snippet is...")
-			pretty_print_board(processed_rows,num_divisions,csize)
+			pretty_print_board(processed_rows)
 			print ""
 		for i in range(num_divisions):
 			next_board.append(processed_rows[i])
@@ -116,15 +116,15 @@ def process_section(section, rsize, csize):
     	print "csize:" + str(csize)
     new_board = [["0" for x in range(csize)] for x in range(rsize-2)]
     # process section; return section updated for next iteration
-    for row in range(0,rsize-2):
+    for row in range(1, rsize-1):
         for col in range(csize):
             result = check_cell(section, row, col, rsize,csize)
             # if cell should be dead, set to 0 in next iteration board
             if result == "die":
-                new_board[row][col] = "0"
+                new_board[row-1][col] = "0"
             # if cell reproduced or still lives, set to 1 in next board
             elif result == "reproduce" or result == "live":
-                new_board[row][col] = "1"
+                new_board[row-1][col] = "1"
     return new_board
 
 def check_cell(board, row, col, dim):
@@ -174,6 +174,9 @@ def check_cell(board, row, col, dim):
             return "NA"
 
 def check_cell(board, row, col, rsize, csize):
+    if debugMode:
+        print "checking cell:"
+        print str(row) + " " + str(col) + " " + str(rsize) + " " + str(csize)
     cell = board[row][col]
 
     # determine row index above cell
@@ -233,11 +236,13 @@ def print_board(board, dim):
                 print '%s,%s'%(row,col)
 
 
-def pretty_print_board(board, col, row):
+def pretty_print_board(board):
+    row = len(board)
+    col = len(board[0])
     print_str = ""
-    for c in range(col):
-        for r in range(row):
-            print_str += str(board[c][r])
+    for r in range(row):
+        for c in range(col):
+            print_str += str(board[r][c])
         print print_str
         print_str = ""
 

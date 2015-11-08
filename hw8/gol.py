@@ -6,6 +6,7 @@ import numpy as np
 
 debug = 0
 def main(argv):
+    comm = MPI.COMM_WORLD
     global debug
     filename = ''
     num_cores = 0
@@ -37,17 +38,75 @@ def main(argv):
 
     # build the game board
     board = build_board(lines, board_dim)
+    # if debug:
+    #     pretty_print_board(board)
+    #     print ""
 
-    pretty_print_board(board)
-    print ""
+    rank = comm.Get_rank()
+    # head
+    if rank == 0:
+        # deep-copy the new board to process
+        new_board = list(board)
+        # pad the by new board top row with the original board's bottom row
+        new_board.insert(0, board[board_dim-1])
+        # pad the new board bottom row the original board's top row
+        new_board.append(board[0])
 
-    comm = MPI.COMM_WORLD
+        num_divisions = board_dim / num_cores
+        next_board = []
+        # create a queue of rows to process
+        rows_to_process = []
+        for row in range(1, num_cores*num_divisions, num_divisions):
+            rows = list(new_board[row-1:row+num_divisions+1])
+            # add the new set of rows to the queue to be processed
+            rows_to_process.append(rows)
 
-    # run the simulation
-    for i in range(num_iter):
-        board = run_iter(comm, board, board_dim, num_cores)
-        pretty_print_board(board)
-        print ""
+        if debug:
+            num_rows_to_process = len(rows_to_process)
+            print "Number of chunks to process:" + str(num_rows_to_process)
+            for i in range(num_rows_to_process):
+                print rows_to_process[i]
+
+        for i in range(0, len(rows_to_process)-1):
+            if debug:
+                print "sending data to worker: " + str(i+1)
+            # allocate array to send to workers
+            data = np.array(rows_to_process[i], dtype='i')
+            # send a row to some worker to process
+            #comm.Send([data, MPI.INT], dest=i+1)
+            comm.Isend([data, MPI.INT], dest=1)
+            # allocate space to receive processed row from worker
+            recv = np.zeros((3,6), dtype='i')
+            # receive processed row from worker
+            worker_id = 1
+            comm.Recv([recv, MPI.INT], source=worker_id)
+            if debug:
+                print "receiving processed row from worker " + str(worker_id) + ":"
+                print recv
+
+    # workers
+    else:
+        # allocate space to receive row to process from head
+        data = np.zeros((5,6), dtype='i')
+        # receive row to process from head
+        comm.Recv([data, MPI.INT], source=0)
+        # process the row
+        processed_row = np.array(process_section(data, 5, 6), dtype='i')
+        if debug:
+            print "received data from head:"
+            print data
+            print "the processed row is:"
+            print processed_row
+        # send the processed row back to head
+        comm.Send([processed_row, MPI.INT], dest=0)
+
+    # # run the simulation
+    # if comm.Get_rank() == 0:
+    #     for i in range(num_iter):
+    #         board = run_iter(comm, board, board_dim, num_cores)
+    #         # if debug:
+    #         #     pretty_print_board(board)
+    #         #     print ""
 
     # done; print the output
     #print_board(board, board_dim)
@@ -69,59 +128,9 @@ def build_board(lines, dim):
     return board
 
 
-def run_iter(comm, board, dim, num_cores):
-    global debug
-    # divide board into num_cores subsections
-    # have subsections include overlapping edge with other subsections
-    # send subsection to be processed / updated for next iteration
-    # merge output back into full board
-    new_board = list(board)
-    new_board.insert(0, board[dim-1])
-    new_board.append(board[0])
-
-    if(debug):
-        print "Matrix with ghost rows is..."
-        pretty_print_board(new_board)
-        print ""
-
-    rank = comm.Get_rank()
-    if (rank == 0):
-
-        num_divisions = dim / num_cores
-        if(debug):
-            print "Dividing input..."
-            print "Snipped boards are...\n"
-        next_board = []
-        rows_to_process = []
-        for row in range(1, num_cores*num_divisions, num_divisions):
-            rows = list(new_board[row-1:row+num_divisions+1])
-        rows_to_process.append(rows)
-    for i in range(0, len(rows_to_process)-1):
-        print "sending data to core: " + str(i+1)
-        data = np.array(rows_to_process[i], dtype='i')
-        comm.Send([data, MPI.INT], dest=i+1)
-        # divide and send
-        recv = np.zeros((3,6), dtype='i')
-        comm.Recv([recv, MPI.INT], source=i+1)
-        print "receiving processed row:"
-        print recv
-    else:
-        pass
-        # run divisions
-    data = np.zeros((5,6), dtype='i')
-    comm.Recv([data, MPI.INT], source=0)
-    print data
-    processed_row = np.array(process_section(data, 5, 6), dtype='i')
-    print processed_row
-    comm.Send([processed_row, MPI.INT], dest=0)
-
-
 def process_section(section, rsize, csize):
     global debug
     # declare next iteration board
-    if debug:
-        print "rsize:" + str(rsize)
-        print "csize:" + str(csize)
     new_board = [[0 for x in range(csize)] for x in range(rsize-2)]
     # process section; return section updated for next iteration
     for row in range(1, rsize-1):
@@ -138,9 +147,6 @@ def process_section(section, rsize, csize):
 
 def check_cell(board, row, col, rsize, csize):
     global debug
-    if debug:
-        print "checking cell:"
-        print str(row) + " " + str(col) + " " + str(rsize) + " " + str(csize)
     cell = board[row][col]
 
     # determine row index above cell

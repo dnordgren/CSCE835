@@ -9,21 +9,18 @@ def main(argv):
     comm = MPI.COMM_WORLD
     global debug
     filename = ''
-    num_cores = 0
+    num_cores = comm.Get_size()
 
     try:
-        opts, args = getopt.getopt(argv,'i:c:d')
+        opts, args = getopt.getopt(argv,'i:d')
     except getopt.GetoptError:
         help_string = ('gol.py -i <input_file>'
-                             ' -c <num_cores>'
                              ' -d <if_debug>')
         print help_string
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-i':
             filename = arg
-        elif opt == '-c':
-            num_cores = int(arg)
         elif opt == '-d':
             debug = 1
 
@@ -52,7 +49,8 @@ def main(argv):
         # pad the new board bottom row the original board's top row
         new_board.append(board[0])
 
-        num_divisions = board_dim / num_cores
+        # divide across number of workers (total cores - 1)
+        num_divisions = board_dim / (num_cores-1)
         next_board = []
         # create a queue of rows to process
         rows_to_process = []
@@ -68,48 +66,54 @@ def main(argv):
                 print rows_to_process[i]
 
         for i in range(0, len(rows_to_process)-1):
+            worker_id = i+1
             if debug:
-                print "sending data to worker: " + str(i+1)
+                print "sending data to worker: " + str(worker_id)
             # allocate array to send to workers
             data = np.array(rows_to_process[i], dtype='i')
             # send a row to some worker to process
             #comm.Send([data, MPI.INT], dest=i+1)
-            comm.Isend([data, MPI.INT], dest=1)
+            comm.Isend([data, MPI.INT], dest=worker_id)
+
+        processed_rows = []
+        for i in range(0, len(rows_to_process)-1):
             # allocate space to receive processed row from worker
-            recv = np.zeros((3,6), dtype='i')
+            recv = np.zeros((2,6), dtype='i')
             # receive processed row from worker
-            worker_id = 1
-            comm.Recv([recv, MPI.INT], source=worker_id)
+            comm.Recv([recv, MPI.INT], MPI.ANY_SOURCE)
+            processed_rows.append([recv])
             if debug:
-                print "receiving processed row from worker " + str(worker_id) + ":"
+                print "received processed row from worker"
                 print recv
+
+        # declare space for the merged board
+        merged_board = processed_rows[0]
+        # merge the processed rows back together
+        for sub_board in range(1, len(processed_rows)):
+            #stack subsequent rows
+            merged_board = np.vstack((merged_board, processed_rows[sub_board]))
+
+        # remove numpy's formatting
+        merged_board.flatten()
+        # shape back to correct dimensions
+        merged_board.shape = (board_dim, board_dim)
+
+        if debug:
+            print "finished iteration:"
+            print merged_board
+
+
 
     # workers
     else:
         # allocate space to receive row to process from head
-        data = np.zeros((5,6), dtype='i')
+        data = np.zeros((4,6), dtype='i')
         # receive row to process from head
         comm.Recv([data, MPI.INT], source=0)
         # process the row
-        processed_row = np.array(process_section(data, 5, 6), dtype='i')
-        if debug:
-            print "received data from head:"
-            print data
-            print "the processed row is:"
-            print processed_row
+        processed_row = np.array(process_section(data, 4, 6), dtype='i')
         # send the processed row back to head
         comm.Send([processed_row, MPI.INT], dest=0)
-
-    # # run the simulation
-    # if comm.Get_rank() == 0:
-    #     for i in range(num_iter):
-    #         board = run_iter(comm, board, board_dim, num_cores)
-    #         # if debug:
-    #         #     pretty_print_board(board)
-    #         #     print ""
-
-    # done; print the output
-    #print_board(board, board_dim)
 
 
 # takes the input file format and converts to 2d array for iterating
@@ -191,13 +195,6 @@ def check_cell(board, row, col, rsize, csize):
             return "reproduce"
         else:
             return "NA"
-
-
-def merge_sections(sections):
-    global debug
-    # merge processed sections back into full board
-    # remove section overlap
-    pass
 
 
 # prints the board in the input file format

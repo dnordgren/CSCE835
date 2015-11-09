@@ -32,6 +32,11 @@ def main(argv):
     num_iter = int(lines.pop(0))
     # parse board size from input file
     board_dim = int(lines.pop(0))
+    # handle too many cores
+    if num_cores > (board_dim+1):
+        print "ERROR: sorry, you can't use worker threads than rows/columns of the board."
+        print "Using " + str(board_dim) + " worker threads."
+        num_cores = (board_dim+1)
 
     # build the game board
     board = build_board(lines, board_dim)
@@ -42,6 +47,9 @@ def main(argv):
     rank = comm.Get_rank()
     # head
     if rank == 0:
+        if debug:
+            print "starting board:"
+            print board
         for iter in range(num_iter):
             # deep-copy the new board to process
             new_board = np.array(board)
@@ -52,21 +60,33 @@ def main(argv):
             next_board = []
             # create a queue of rows to process
             rows_to_process = []
-            for row in range(1, num_cores*num_divisions, num_divisions):
-                rows = list(new_board[row-1:row+num_divisions+1])
-                # add the new set of rows to the queue to be processed
-                rows_to_process.append(rows)
 
-            for i in range(0, len(rows_to_process)-1):
+            # calculate remainder
+            remainder = board_dim % (num_cores-1)
+
+            # iterate only over evenly-divided rows (and add 2 to account for padding)
+            remainder_row = 0
+            #for row in range(1, board_dim-remainder+2, num_divisions):
+            for row in range(1, num_cores*num_divisions, num_divisions):
+                # divide up rows
+                row_to_process = np.array(new_board[row-1:row+num_divisions+1])
+                # queue all cleanly-divided rows to processing by workers
+                if len(row_to_process) == ((board_dim-remainder)/(num_cores-1))+2:
+                    rows_to_process.append(row_to_process)
+                # the row is a remainder -- process separately
+                else:
+                    remainder_row = row_to_process
+
+            for i in range(0, len(rows_to_process)):
                 worker_id = i+1
                 # allocate array to send to workers
                 data = np.array(rows_to_process[i], dtype='i')
-                # send a row to some worker to process
+                # asynchronously send a row to some worker to process
                 comm.Isend([data, MPI.INT], dest=worker_id)
 
             # allocate room for the processed rows
             processed_rows = [0]*(num_cores-1)
-            for i in range(0, len(rows_to_process)-1):
+            for i in range(0, len(rows_to_process)):
                 status = MPI.Status()
                 # allocate space to receive processed row from worker
                 recv = np.zeros((num_divisions, board_dim), dtype='i')
@@ -77,6 +97,10 @@ def main(argv):
                 # insert the processed row based on its sender id (makes results
                 # get reconstructed in the correct order)
                 processed_rows[sender_rank-1] = recv
+            # process the remainder row locally (on the head)
+            if remainder > 0:
+                processed_remainder_row = np.array(process_section(remainder_row, remainder+2, board_dim))
+                processed_rows.append(processed_remainder_row)
 
             # declare space for the merged board
             merged_board = processed_rows[0]
@@ -84,7 +108,6 @@ def main(argv):
             for sub_board in range(1, len(processed_rows)):
                 #stack subsequent rows
                 merged_board = np.vstack((merged_board, processed_rows[sub_board]))
-
             # remove numpy's formatting
             merged_board.flatten()
             # shape back to correct dimensions
@@ -94,6 +117,8 @@ def main(argv):
             if debug:
                 print "finished iteration:"
                 print merged_board
+        # done, print the output
+        print_board(board)
 
     # workers
     else:
@@ -190,7 +215,8 @@ def check_cell(board, row, col, rsize, csize):
 
 
 # prints the board in the input file format
-def print_board(board, dim):
+def print_board(board):
+    dim = len(board)
     for row in range(dim):
         for col in range(dim):
             if(board[row][col] == 1):

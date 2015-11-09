@@ -36,12 +36,12 @@ def main(argv):
     # build the game board
     board = build_board(lines, board_dim)
 
+    # divide across number of workers (total cores - 1)
+    num_divisions = board_dim / (num_cores-1)
+
     rank = comm.Get_rank()
     # head
     if rank == 0:
-        if debug:
-            print "starting board:"
-            print board
         for iter in range(num_iter):
             # deep-copy the new board to process
             new_board = np.array(board)
@@ -49,9 +49,6 @@ def main(argv):
             new_board = np.insert(new_board, 0, board[board_dim-1], axis=0)
             # pad the new board bottom row the original board's top row
             new_board = np.append(new_board, [board[0]], axis=0)
-
-            # divide across number of workers (total cores - 1)
-            num_divisions = board_dim / (num_cores-1)
             next_board = []
             # create a queue of rows to process
             rows_to_process = []
@@ -72,12 +69,9 @@ def main(argv):
             for i in range(0, len(rows_to_process)-1):
                 status = MPI.Status()
                 # allocate space to receive processed row from worker
-                recv = np.zeros((2,6), dtype='i')
+                recv = np.zeros((num_divisions, board_dim), dtype='i')
                 # receive processed row from worker
                 comm.Recv([recv, MPI.INT], MPI.ANY_SOURCE, status=status)
-                if debug:
-                    print "received data:"
-                    print recv
                 # use status to determine sender's id
                 sender_rank = status.Get_source()
                 # insert the processed row based on its sender id (makes results
@@ -105,11 +99,11 @@ def main(argv):
     else:
         for iter in range(num_iter):
             # allocate space to receive row to process from head
-            data = np.zeros((4,6), dtype='i')
+            data = np.zeros((num_divisions+2, board_dim), dtype='i')
             # receive row to process from head
             comm.Recv([data, MPI.INT], source=0)
-            # process the row
-            processed_row = np.array(process_section(data, 4, 6), dtype='i')
+            # process the row -- rows = number of divisions + 2 rows of padding
+            processed_row = np.array(process_section(data, num_divisions+2, board_dim), dtype='i')
             # asynchronously send the processed row back to head
             comm.Isend([processed_row, MPI.INT], dest=0)
 

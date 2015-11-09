@@ -42,67 +42,76 @@ def main(argv):
     rank = comm.Get_rank()
     # head
     if rank == 0:
-        # deep-copy the new board to process
-        new_board = list(board)
-        # pad the by new board top row with the original board's bottom row
-        new_board.insert(0, board[board_dim-1])
-        # pad the new board bottom row the original board's top row
-        new_board.append(board[0])
-
-        # divide across number of workers (total cores - 1)
-        num_divisions = board_dim / (num_cores-1)
-        next_board = []
-        # create a queue of rows to process
-        rows_to_process = []
-        for row in range(1, num_cores*num_divisions, num_divisions):
-            rows = list(new_board[row-1:row+num_divisions+1])
-            # add the new set of rows to the queue to be processed
-            rows_to_process.append(rows)
-
-        if debug:
-            num_rows_to_process = len(rows_to_process)
-            print "Number of chunks to process:" + str(num_rows_to_process)
-            for i in range(num_rows_to_process):
-                print rows_to_process[i]
-
-        for i in range(0, len(rows_to_process)-1):
-            worker_id = i+1
+        for iter in range(num_iter):
+            # deep-copy the new board to process
+            new_board = np.array(board)
             if debug:
-                print "sending data to worker: " + str(worker_id)
-            # allocate array to send to workers
-            data = np.array(rows_to_process[i], dtype='i')
-            # send a row to some worker to process
-            #comm.Send([data, MPI.INT], dest=i+1)
-            comm.Isend([data, MPI.INT], dest=worker_id)
+                print "board to process"
+                print new_board
+            # pad the by new board top row with the original board's bottom row
+            new_board = np.insert(new_board, 0, board[board_dim-1], axis=0)
+            # pad the new board bottom row the original board's top row
+            new_board = np.append(new_board, [board[0]], axis=0)
 
-        processed_rows = []
-        for i in range(0, len(rows_to_process)-1):
-            # allocate space to receive processed row from worker
-            recv = np.zeros((2,6), dtype='i')
-            # receive processed row from worker
-            comm.Recv([recv, MPI.INT], MPI.ANY_SOURCE)
-            processed_rows.append([recv])
+            # divide across number of workers (total cores - 1)
+            num_divisions = board_dim / (num_cores-1)
+            next_board = []
+            # create a queue of rows to process
+            rows_to_process = []
+            for row in range(1, num_cores*num_divisions, num_divisions):
+                rows = list(new_board[row-1:row+num_divisions+1])
+                # add the new set of rows to the queue to be processed
+                rows_to_process.append(rows)
+
             if debug:
-                print "received processed row from worker"
-                print recv
+                num_rows_to_process = len(rows_to_process)
+                print "Number of chunks to process:" + str(num_rows_to_process)
+                for i in range(num_rows_to_process):
+                    print rows_to_process[i]
 
-        # declare space for the merged board
-        merged_board = processed_rows[0]
-        # merge the processed rows back together
-        for sub_board in range(1, len(processed_rows)):
-            #stack subsequent rows
-            merged_board = np.vstack((merged_board, processed_rows[sub_board]))
+            for i in range(0, len(rows_to_process)-1):
+                worker_id = i+1
+                if debug:
+                    print "sending data to worker: " + str(worker_id)
+                # allocate array to send to workers
+                data = np.array(rows_to_process[i], dtype='i')
+                # send a row to some worker to process
+                comm.Send([data, MPI.INT], dest=worker_id)
 
-        # remove numpy's formatting
-        merged_board.flatten()
-        # shape back to correct dimensions
-        merged_board.shape = (board_dim, board_dim)
+            # allocate room for the processed rows
+            processed_rows = [0]*(num_cores-1)
+            for i in range(0, len(rows_to_process)-1):
+                status = MPI.Status()
+                # allocate space to receive processed row from worker
+                recv = np.zeros((2,6), dtype='i')
+                # receive processed row from worker
+                comm.Recv([recv, MPI.INT], MPI.ANY_SOURCE, status=status)
+                # use status to determine sender's id
+                sender_rank = status.Get_source()
+                # insert the processed row based on its sender id (makes results
+                # get reconstructed in the correct order)
+                processed_rows[sender_rank-1] = recv
+                if debug:
+                    print "received processed row from worker"
+                    print recv
 
-        if debug:
-            print "finished iteration:"
-            print merged_board
+            # declare space for the merged board
+            merged_board = processed_rows[0]
+            # merge the processed rows back together
+            for sub_board in range(1, len(processed_rows)):
+                #stack subsequent rows
+                merged_board = np.vstack((merged_board, processed_rows[sub_board]))
 
+            # remove numpy's formatting
+            merged_board.flatten()
+            # shape back to correct dimensions
+            merged_board.shape = (board_dim, board_dim)
+            # save the board for next iteration
+            board = merged_board
 
+            if debug:
+                print "finished iteration:"
+                print merged_board
 
     # workers
     else:
@@ -112,6 +121,9 @@ def main(argv):
         comm.Recv([data, MPI.INT], source=0)
         # process the row
         processed_row = np.array(process_section(data, 4, 6), dtype='i')
+        if debug:
+            print "worker processed row:"
+            print processed_row
         # send the processed row back to head
         comm.Send([processed_row, MPI.INT], dest=0)
 

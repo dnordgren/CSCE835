@@ -76,7 +76,7 @@ def main(argv):
                 # allocate array to send to workers
                 data = np.array(rows_to_process[i], dtype='i')
                 # send a row to some worker to process
-                comm.Send([data, MPI.INT], dest=worker_id)
+                comm.Isend([data, MPI.INT], dest=worker_id)
 
             # allocate room for the processed rows
             processed_rows = [0]*(num_cores-1)
@@ -109,23 +109,23 @@ def main(argv):
             # save the board for next iteration
             board = merged_board
 
-            if debug:
-                print "finished iteration:"
-                print merged_board
+            print "finished iteration:"
+            print merged_board
 
     # workers
     else:
-        # allocate space to receive row to process from head
-        data = np.zeros((4,6), dtype='i')
-        # receive row to process from head
-        comm.Recv([data, MPI.INT], source=0)
-        # process the row
-        processed_row = np.array(process_section(data, 4, 6), dtype='i')
-        if debug:
-            print "worker processed row:"
-            print processed_row
-        # send the processed row back to head
-        comm.Send([processed_row, MPI.INT], dest=0)
+        for iter in range(num_iter):
+            # allocate space to receive row to process from head
+            data = np.zeros((4,6), dtype='i')
+            # receive row to process from head
+            comm.Recv([data, MPI.INT], source=0)
+            # process the row
+            processed_row = np.array(process_section(data, 4, 6), dtype='i')
+            if debug:
+                print "worker processed row:"
+                print processed_row
+            # send the processed row back to head
+            comm.Isend([processed_row, MPI.INT], dest=0)
 
 
 # takes the input file format and converts to 2d array for iterating

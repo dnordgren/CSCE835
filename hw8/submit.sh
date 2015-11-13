@@ -15,6 +15,6 @@ echo "mpiexec -n $2 python ~/CSCE835/hw8/gol.py -i $1" >> hw8.slurm
 # queue the slurm job
 sbatch hw8.slurm
 
-echo "check 'out.out' for results once the slurm job has completed"
+echo "out.out"
 
 exit 0

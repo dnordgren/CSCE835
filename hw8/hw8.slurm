@@ -1,7 +1,7 @@
 #!/bin/sh
-#SBATCH --ntasks=6
+#SBATCH --ntasks=3
 #SBATCH --time=03:15:00
 #SBATCH --job-name=group8-hw8
 #SBATCH --error=err.err
 #SBATCH --output=out.out
-mpiexec -n 6 python ~/CSCE835/hw8/gol.py -i sample.input
+mpiexec -n 3 python ~/CSCE835/hw8/gol.py -i sample.input -d

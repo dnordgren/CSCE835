@@ -25,29 +25,33 @@ public class MutualFriendFinder {
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
             String[] group = line.split("\t");
-            String user = group[0];
-            IntWritable userKey = new IntWritable(Integer.parseInt(user));
-            if(!group[1].trim().isEmpty())
-            {
-                String[] friends = group[1].split(",");
-                String directFriend;
-                IntWritable directFriendKey = new IntWritable();
-                Text directFriendValue = new Text();
-                String mutualFriend;
-                IntWritable mutualFriendKey = new IntWritable();
-                Text mutualFriendValue = new Text();
-                for (int i = 0; i < friends.length; i++) {
-                    directFriend = friends[i];
-                    directFriendValue.set(IS_FRIEND + "," + directFriend);
-                    context.write(userKey, directFriendValue);   // User's direct friend
-                    directFriendKey.set(Integer.parseInt(directFriend));
-                    directFriendValue.set(IS_MUTUAL_FRIEND + "," + directFriend);
-                    for (int j = i+1; j < friends.length; j++) {
-                        mutualFriend = friends[j];
-                        mutualFriendKey.set(Integer.parseInt(mutualFriend));
-                        mutualFriendValue.set(IS_MUTUAL_FRIEND + "," + mutualFriend);
-                        context.write(directFriendKey, mutualFriendValue);   // User's direct friend is mutual friend with user's another friend
-                        context.write(mutualFriendKey, directFriendValue);   // Vice - versa
+            
+            // For user's with no friends :(
+            if(group.length == 2){
+                String user = group[0];
+                IntWritable userKey = new IntWritable(Integer.parseInt(user));
+                if(!group[1].trim().isEmpty()){
+                    String[] friends = group[1].split(",");
+                    String directFriend;
+                    IntWritable directFriendKey = new IntWritable();
+                    Text directFriendValue = new Text();
+                    String mutualFriend;
+                    IntWritable mutualFriendKey = new IntWritable();
+                    Text mutualFriendValue = new Text();
+                    for (int i = 0; i < friends.length; i++) {
+                        directFriend = friends[i];
+                        directFriendValue.set(IS_FRIEND + "," + directFriend);
+                        context.write(userKey, directFriendValue);   // User's direct friend
+                        directFriendKey.set(Integer.parseInt(directFriend));
+                        directFriendValue.set(IS_MUTUAL_FRIEND + "," + directFriend);
+                        
+                        for (int j = i+1; j < friends.length; j++) {
+                            mutualFriend = friends[j];
+                            mutualFriendKey.set(Integer.parseInt(mutualFriend));
+                            mutualFriendValue.set(IS_MUTUAL_FRIEND + "," + mutualFriend);
+                            context.write(directFriendKey, mutualFriendValue);   // User's direct friend is mutual friend with user's another friend
+                            context.write(mutualFriendKey, directFriendValue);   // Vice - versa
+                        }
                     }
                 }
             }

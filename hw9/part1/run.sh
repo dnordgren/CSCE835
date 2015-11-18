@@ -38,5 +38,5 @@ hadoop jar wc2.jar WordCount2 /hw9_1/counts.txt  /hw9_1/out/out2
 
 hadoop fs -get /hw9_1/out/out2
 
-cp ./out2/part-r-00000 ./wc_sored.txt
-awk '{print $2,"\t",$1}' ./wc_sored.txt > ./wc_sored_word_counts.txt
+cp ./out2/part-r-00000 ./wc_sorted.txt
+awk '{print $2,"\t",$1}' ./wc_sorted.txt > ./wc_sorted_word_counts.txt

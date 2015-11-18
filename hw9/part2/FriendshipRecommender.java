@@ -14,32 +14,37 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
  
 public class FriendshipRecommender {
  
+    private static final String IS_FRIEND = "IsFriendsWith";
+    private static final String IS_MUTUAL_FRIEND = "IsMutualFriendsWith";
+    private static final int MAX_RECOMMENDATION_COUNT = 5;
+    
     public static class Map extends Mapper<LongWritable, Text, IntWritable, Text> {
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
-            String[] userAndFriends = line.split("\t");
-            if (userAndFriends.length == 2) {
-                String user = userAndFriends[0];
-                IntWritable userKey = new IntWritable(Integer.parseInt(user));
-                String[] friends = userAndFriends[1].split(",");
-                String friend1;
-                IntWritable friend1Key = new IntWritable();
-                Text friend1Value = new Text();
-                String friend2;
-                IntWritable friend2Key = new IntWritable();
-                Text friend2Value = new Text();
+            String[] group = line.split("\t");
+            String user = group[0];
+            IntWritable userKey = new IntWritable(Integer.parseInt(user));
+            if(!group[1].trim().isEmpty())
+            {
+                String[] friends = group[1].split(",");
+                String directFriend;
+                IntWritable directFriendKey = new IntWritable();
+                Text directFriendValue = new Text();
+                String mutualFriend;
+                IntWritable mutualFriendKey = new IntWritable();
+                Text mutualFriendValue = new Text();
                 for (int i = 0; i < friends.length; i++) {
-                    friend1 = friends[i];
-                    friend1Value.set("1," + friend1);
-                    context.write(userKey, friend1Value);   // Paths of length 1.
-                    friend1Key.set(Integer.parseInt(friend1));
-                    friend1Value.set("2," + friend1);
+                    directFriend = friends[i];
+                    directFriendValue.set(IS_FRIEND + "," + directFriend);
+                    context.write(userKey, directFriendValue);   // User's direct friend
+                    directFriendKey.set(Integer.parseInt(directFriend));
+                    directFriendValue.set(IS_MUTUAL_FRIEND + "," + directFriend);
                     for (int j = i+1; j < friends.length; j++) {
-                        friend2 = friends[j];
-                        friend2Key.set(Integer.parseInt(friend2));
-                        friend2Value.set("2," + friend2);
-                        context.write(friend1Key, friend2Value);   // Paths of length 2.
-                        context.write(friend2Key, friend1Value);   // Paths of length 2.
+                        mutualFriend = friends[j];
+                        mutualFriendKey.set(Integer.parseInt(mutualFriend));
+                        mutualFriendValue.set(IS_MUTUAL_FRIEND + "," + mutualFriend);
+                        context.write(directFriendKey, mutualFriendValue);   // User's direct friend is mutual friend with user's another friend
+                        context.write(mutualFriendKey, directFriendValue);   // Vice - versa
                     }
                 }
             }
@@ -49,46 +54,52 @@ public class FriendshipRecommender {
     public static class Reduce extends Reducer<IntWritable, Text, IntWritable, Text> {
         public void reduce(IntWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             String[] value;
-            HashMap<String, Integer> hash = new HashMap<String, Integer>();
+            HashMap<String, Integer> mutualFriendCounter = new HashMap<>();
             for (Text val : values) {
                 value = (val.toString()).split(",");
-                if (value[0].equals("1")) { // Paths of length 1.
-                    hash.put(value[1], -1);
-                } else if (value[0].equals("2")) {  // Paths of length 2.
-                    if (hash.containsKey(value[1])) {
-                        if (hash.get(value[1]) != -1) {
-                            hash.put(value[1], hash.get(value[1]) + 1);
+                String relation = value[0];
+                String UID = value[1];
+                if (relation.equals(IS_FRIEND)) { 
+                    // User's friend already, don't include.
+                    mutualFriendCounter.put(UID, -1);
+                } else if (relation.equals(IS_MUTUAL_FRIEND)) { 
+                    // Pair has a mutual friend, check if they are already friends
+                    if (mutualFriendCounter.containsKey(UID)) {
+                        if (mutualFriendCounter.get(UID) != -1) { 
+                            // Increment mutual friend count
+                            mutualFriendCounter.put(UID, mutualFriendCounter.get(UID) + 1);
                         }
                     } else {
-                        hash.put(value[1], 1);
+                        // First mutual friend, insert into map
+                        mutualFriendCounter.put(UID, 1);
                     }
                 }
             }
-            // Convert hash to list and remove paths of length 1.
-            ArrayList<Entry<String, Integer>> list = new ArrayList<Entry<String, Integer>>();
-            for (Entry<String, Integer> entry : hash.entrySet()) {
-                if (entry.getValue() != -1) {   // Exclude paths of length 1.
-                    list.add(entry);
+            // Remove all the negative counts(already friends)
+            ArrayList<Entry<String, Integer>> mutualFriends = new ArrayList<>();
+            for (Entry<String, Integer> potentialMutualFriend : mutualFriendCounter.entrySet()) {
+                // If not already a friend,  potential mutual friend becomes a mutual friend
+                if (potentialMutualFriend.getValue() != -1) {
+                    mutualFriends.add(potentialMutualFriend);
                 }
             }
-            // Sort key-value pairs in the list by values (number of common friends).
-            Collections.sort(list, new Comparator<Entry<String, Integer>>() {
-                public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) {
-                    return e2.getValue().compareTo(e1.getValue());
+            
+            // Sort mutual friends by frequency.
+            Collections.sort(mutualFriends, new Comparator<Entry<String, Integer>>() {
+                @Override
+                public int compare(Entry<String, Integer> pair1, Entry<String, Integer> pair2) {
+                    // Just comparing the value part of the entry.
+                    return pair2.getValue().compareTo(pair1.getValue());
                 }
             });
-            int MAX_RECOMMENDATION_COUNT = 10;
-            if (MAX_RECOMMENDATION_COUNT < 1) {
-                // Output all key-value pairs in the list.
-                context.write(key, new Text(StringUtils.join(list, ",")));
-            } else {
-                // Output at most MAX_RECOMMENDATION_COUNT keys with the highest values (number of common friends).
-                ArrayList<String> top = new ArrayList<String>();
-                for (int i = 0; i < Math.min(MAX_RECOMMENDATION_COUNT, list.size()); i++) {
-                    top.add(list.get(i).getKey());
-                }
-                context.write(key, new Text(StringUtils.join(top, ",")));
+            
+            ArrayList<String> recommendedFriends = new ArrayList<>();
+            // If mutual friends are less than max needed recommended friends
+            for (int i = 0; i < Math.min(MAX_RECOMMENDATION_COUNT, mutualFriends.size()); i++) {
+                recommendedFriends.add(mutualFriends.get(i).getKey());
             }
+            context.write(key, new Text(StringUtils.join(recommendedFriends, ",")));
+            
         }
     }
  

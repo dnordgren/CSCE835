@@ -29,6 +29,21 @@ public class WordCount1 {
 			  }
 		  }
 
+       public static class CombReducer
+           extends Reducer<Text, IntWritable, Text, IntWritable> {
+               private IntWritable result = new IntWritable();
+
+               public void reduce(Text key, Iterable<IntWritable> values, Context context)
+               throws IOException, InterruptedException {
+                  int sum = 0;
+                  for (IntWritable val : values) {
+                       sum += val.get();
+                   }
+                   result.set(sum);
+                   context.write(key, result);
+               }
+         }
+
 	  public static class IntSumReducer
 		  extends Reducer<Text, IntWritable, Text, IntWritable> {
 			  private IntWritable result = new IntWritable();
@@ -52,7 +67,7 @@ public class WordCount1 {
 		Job wcjob = Job.getInstance(conf, "word count");
 		wcjob.setJarByClass(WordCount1.class);
 		wcjob.setMapperClass(TokenizerMapper.class);
-		wcjob.setCombinerClass(IntSumReducer.class);
+		wcjob.setCombinerClass(CombReducer.class);
 		wcjob.setReducerClass(IntSumReducer.class);
 		wcjob.setOutputKeyClass(Text.class);
 		wcjob.setOutputValueClass(IntWritable.class);

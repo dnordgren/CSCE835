@@ -1,5 +1,8 @@
 #!/bin/sh
 
+export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.91.x86_64/
+export HADOOP_CLASSPATH=$JAVA_HOME/lib/tools.jar
+
 # mkdir 
 hdfs dfs -mkdir /hw9_1
 

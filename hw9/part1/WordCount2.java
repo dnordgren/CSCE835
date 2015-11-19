@@ -28,7 +28,7 @@ public class WordCount2 {
           
           String[] parts = record.split("\t");
           String p1 = String.format("%20s", parts[0]);
-          String p2 = String.format("%5s", parts[1]);
+          String p2 = String.format("%10s", parts[1]);
           
           wor.set(p1);
           cou.set(p2);

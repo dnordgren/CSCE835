@@ -12,7 +12,12 @@ hdfs dfs -mkdir /hw9_1
 #sudo chown hdfs:hdfs full_wordcount_text.txt
 hadoop fs -put full_wordcount_text.txt /hw9_1/
 
-# complie the hadoop code
+rm -f wc1.jar
+echo "Removed wc1.jar"
+rm -f wc2.jar
+echo "Removed wc2.jar"
+
+# compile the hadoop code
 hadoop com.sun.tools.javac.Main WordCount1.java
 jar cf wc1.jar WordCount1*.class
 

@@ -1,0 +1,8 @@
+executable = CSE835_HW3_2.pl
+universe = vanilla
+input = input
+output = output
+log = log
+error = error
+InitialDir = job_$(Process)
+queue 12

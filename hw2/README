@@ -1,0 +1,8 @@
+## Index
+ - CSCE835_partition.pl -- this file partitions input file and creates Condor submission
+ - CSCE835_HW3_1.pl -- part 1 of the assignment
+ - CSCE835_HW3_2.pl -- part 2 of the assignment
+ - hw_out.txt -- the output from our Condor job
+ - hw1.submit -- the submit file created for the Condor job
+ - one_thousand.txt -- sample input file
+

@@ -63,7 +63,7 @@ sub run{
   open(OF, "> hw1.submit") or die "Cannot open submit file$!\n";
     print OF "executable = $ex\n";
     print OF "universe = grid\n";
-    print OF "grid_resource = \"condor red.unl.edu red.unl.edu:9619\"\n";
+    print OF "grid_resource = condor red.unl.edu red.unl.edu:9619\n";
     print OF "use_x509userproxy = true\n";
     print OF "input = input\n";
     print OF "output = output\n";

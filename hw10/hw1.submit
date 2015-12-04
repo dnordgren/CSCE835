@@ -1,6 +1,6 @@
 executable = 2.pl
 universe = grid
-grid_resource = "condor red.unl.edu red.unl.edu:9619"
+grid_resource = condor red.unl.edu red.unl.edu:9619
 use_x509userproxy = true
 input = input
 output = output
